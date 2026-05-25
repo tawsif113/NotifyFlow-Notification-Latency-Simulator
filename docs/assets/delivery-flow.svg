@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760" role="img" aria-labelledby="title desc">
+  <title id="title">NotifyFlow delivery flow diagram</title>
+  <desc id="desc">Broadcast request flows from the dashboard to the backend, database, message broker, websocket push, and finally the simulated user cards with latency tracking.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#1e293b" stroke-width="0.8" opacity="0.4"/>
+    </pattern>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#60a5fa"/>
+    </marker>
+    <style>
+      .title { font: 700 32px 'Inter', 'Segoe UI', sans-serif; fill: #e2e8f0; }
+      .subtitle { font: 400 15px 'Inter', 'Segoe UI', sans-serif; fill: #94a3b8; }
+      .label { font: 700 18px 'Inter', 'Segoe UI', sans-serif; fill: #e2e8f0; }
+      .sublabel { font: 400 13px 'Inter', 'Segoe UI', sans-serif; fill: #cbd5e1; }
+      .tiny { font: 400 12px 'JetBrains Mono', monospace; fill: #93c5fd; }
+      .box { rx: 18; ry: 18; stroke-width: 2; }
+      .step { font: 700 20px 'JetBrains Mono', monospace; fill: #bfdbfe; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="760" fill="url(#bg)"/>
+  <rect width="1600" height="760" fill="url(#grid)"/>
+
+  <text x="80" y="78" class="title">Delivery path and latency tracking</text>
+  <text x="80" y="108" class="subtitle">The dashboard sends a broadcast, the backend fans out the event, and each user lane records a delivery timestamp.</text>
+
+  <!-- Steps -->
+  <g>
+    <rect x="80" y="180" width="250" height="130" class="box" fill="#0b2a44" stroke="#22d3ee"/>
+    <text x="110" y="220" class="step">01</text>
+    <text x="110" y="252" class="label">Compose</text>
+    <text x="110" y="277" class="sublabel">Set tenant, users, template,</text>
+    <text x="110" y="296" class="sublabel">title, and body in the UI.</text>
+  </g>
+
+  <g>
+    <rect x="380" y="180" width="250" height="130" class="box" fill="#083b2f" stroke="#34d399"/>
+    <text x="410" y="220" class="step">02</text>
+    <text x="410" y="252" class="label">POST /api/notification-requests</text>
+    <text x="410" y="277" class="sublabel">REST call creates the request and</text>
+    <text x="410" y="296" class="sublabel">hands off to the application layer.</text>
+  </g>
+
+  <g>
+    <rect x="680" y="180" width="250" height="130" class="box" fill="#3f206d" stroke="#a78bfa"/>
+    <text x="710" y="220" class="step">03</text>
+    <text x="710" y="252" class="label">Persist</text>
+    <text x="710" y="277" class="sublabel">Request and delivery records land</text>
+    <text x="710" y="296" class="sublabel">in PostgreSQL for later inspection.</text>
+  </g>
+
+  <g>
+    <rect x="980" y="180" width="250" height="130" class="box" fill="#6b3412" stroke="#fbbf24"/>
+    <text x="1010" y="220" class="step">04</text>
+    <text x="1010" y="252" class="label">Publish event</text>
+    <text x="1010" y="277" class="sublabel">The created event moves through</text>
+    <text x="1010" y="296" class="sublabel">RabbitMQ for async handling.</text>
+  </g>
+
+  <g>
+    <rect x="1280" y="180" width="250" height="130" class="box" fill="#1e293b" stroke="#94a3b8"/>
+    <text x="1310" y="220" class="step">05</text>
+    <text x="1310" y="252" class="label">Push live updates</text>
+    <text x="1310" y="277" class="sublabel">STOMP subscribers receive their</text>
+    <text x="1310" y="296" class="sublabel">notification with latency data.</text>
+  </g>
+
+  <!-- Arrow chain -->
+  <path d="M 330 245 L 380 245" stroke="#60a5fa" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 630 245 L 680 245" stroke="#60a5fa" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 930 245 L 980 245" stroke="#60a5fa" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 1230 245 L 1280 245" stroke="#60a5fa" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Lower lane grid -->
+  <g>
+    <rect x="80" y="390" width="1460" height="280" rx="24" fill="#0b1220" stroke="#334155"/>
+    <text x="110" y="435" class="label">Live user lanes</text>
+    <text x="110" y="462" class="subtitle">Each lane behaves like a subscriber card in the dashboard and keeps its own status and latency history.</text>
+
+    <g transform="translate(110 500)">
+      <rect width="250" height="130" rx="18" fill="#102235" stroke="#22d3ee"/>
+      <text x="20" y="34" class="label">user-1</text>
+      <text x="20" y="60" class="sublabel">status: connected</text>
+      <text x="20" y="83" class="sublabel">latency: 142ms</text>
+      <text x="20" y="106" class="tiny">/topic/notifications/demo-tenant/user-1</text>
+    </g>
+
+    <g transform="translate(395 500)">
+      <rect width="250" height="130" rx="18" fill="#102235" stroke="#34d399"/>
+      <text x="20" y="34" class="label">user-2</text>
+      <text x="20" y="60" class="sublabel">status: connected</text>
+      <text x="20" y="83" class="sublabel">latency: 186ms</text>
+      <text x="20" y="106" class="tiny">/topic/notifications/demo-tenant/user-2</text>
+    </g>
+
+    <g transform="translate(680 500)">
+      <rect width="250" height="130" rx="18" fill="#102235" stroke="#fbbf24"/>
+      <text x="20" y="34" class="label">user-3</text>
+      <text x="20" y="60" class="sublabel">status: reconnecting</text>
+      <text x="20" y="83" class="sublabel">latency: pending</text>
+      <text x="20" y="106" class="tiny">/topic/notifications/demo-tenant/user-3</text>
+    </g>
+
+    <g transform="translate(965 500)">
+      <rect width="250" height="130" rx="18" fill="#102235" stroke="#fb7185"/>
+      <text x="20" y="34" class="label">metrics</text>
+      <text x="20" y="60" class="sublabel">fastest · slowest · average</text>
+      <text x="20" y="83" class="sublabel">coverage and request id</text>
+      <text x="20" y="106" class="tiny">aggregated from live deliveries</text>
+    </g>
+
+    <g transform="translate(1250 500)">
+      <rect width="250" height="130" rx="18" fill="#102235" stroke="#a78bfa"/>
+      <text x="20" y="34" class="label">read state</text>
+      <text x="20" y="60" class="sublabel">mark read / unread flows</text>
+      <text x="20" y="83" class="sublabel">keep delivery history current</text>
+      <text x="20" y="106" class="tiny">PATCH /api/deliveries/{id}/*</text>
+    </g>
+  </g>
+</svg>

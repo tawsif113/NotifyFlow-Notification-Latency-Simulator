@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920" role="img" aria-labelledby="title desc">
+  <title id="title">NotifyFlow architecture diagram</title>
+  <desc id="desc">Frontend dashboard connects to Spring Boot backend. The backend routes notification requests through application and domain layers, then persists to PostgreSQL, publishes to RabbitMQ, and pushes updates to WebSocket subscribers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111827" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#0b1220" stop-opacity="0.96"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#60a5fa"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#34d399"/>
+    </marker>
+    <style>
+      .title { font: 700 34px 'Inter', 'Segoe UI', sans-serif; fill: #e2e8f0; }
+      .subtitle { font: 400 15px 'Inter', 'Segoe UI', sans-serif; fill: #94a3b8; }
+      .label { font: 700 18px 'Inter', 'Segoe UI', sans-serif; fill: #e2e8f0; }
+      .sublabel { font: 400 13px 'Inter', 'Segoe UI', sans-serif; fill: #cbd5e1; }
+      .tiny { font: 400 12px 'Inter', 'Segoe UI', sans-serif; fill: #94a3b8; }
+      .mono { font: 600 12px 'JetBrains Mono', monospace; fill: #93c5fd; }
+      .box { rx: 18; ry: 18; stroke-width: 2; }
+      .shadow { filter: url(#glow); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="920" fill="url(#bg)"/>
+  <rect width="1600" height="920" fill="url(#grid)"/>
+
+  <text x="80" y="78" class="title">NotifyFlow notification simulation architecture</text>
+  <text x="80" y="108" class="subtitle">A clean, event-driven pipeline for broadcast simulation, live delivery tracking, and latency visibility.</text>
+
+  <!-- Frontend -->
+  <g class="shadow">
+    <rect x="80" y="170" width="300" height="170" class="box" fill="#082f49" fill-opacity="0.9" stroke="#22d3ee"/>
+    <text x="110" y="215" class="label">React dashboard</text>
+    <text x="110" y="242" class="sublabel">Compose a broadcast, set the tenant,</text>
+    <text x="110" y="262" class="sublabel">fan out to simulated users, and watch</text>
+    <text x="110" y="282" class="sublabel">latency change in real time.</text>
+    <text x="110" y="314" class="mono">frontend/</text>
+  </g>
+
+  <!-- Backend core -->
+  <g class="shadow">
+    <rect x="455" y="165" width="390" height="180" class="box" fill="#064e3b" fill-opacity="0.9" stroke="#34d399"/>
+    <text x="485" y="208" class="label">Spring Boot backend</text>
+    <text x="485" y="236" class="sublabel">REST API + application service + domain model</text>
+    <text x="485" y="258" class="sublabel">drives notification creation, state updates,</text>
+    <text x="485" y="280" class="sublabel">and delivery aggregation.</text>
+    <text x="485" y="314" class="mono">backend/notification-* modules</text>
+  </g>
+
+  <!-- Database -->
+  <g class="shadow">
+    <rect x="955" y="170" width="260" height="170" class="box" fill="#4c1d95" fill-opacity="0.9" stroke="#a78bfa"/>
+    <text x="985" y="215" class="label">PostgreSQL</text>
+    <text x="985" y="242" class="sublabel">Stores requests, delivery rows,</text>
+    <text x="985" y="262" class="sublabel">and state used for validation.</text>
+    <text x="985" y="314" class="mono">notifications</text>
+  </g>
+
+  <!-- RabbitMQ -->
+  <g class="shadow">
+    <rect x="1260" y="170" width="260" height="170" class="box" fill="#7c2d12" fill-opacity="0.72" stroke="#fbbf24"/>
+    <text x="1290" y="215" class="label">RabbitMQ</text>
+    <text x="1290" y="242" class="sublabel">Queues and routes the created event</text>
+    <text x="1290" y="262" class="sublabel">to the consumer adapter.</text>
+    <text x="1290" y="314" class="mono">notifyflow.notifications.*</text>
+  </g>
+
+  <!-- Transport / realtime layer -->
+  <g class="shadow">
+    <rect x="610" y="460" width="380" height="150" class="box" fill="#1e293b" fill-opacity="0.9" stroke="#94a3b8"/>
+    <text x="640" y="505" class="label">WebSocket / STOMP push</text>
+    <text x="640" y="532" class="sublabel">Broadcasts each delivery update to the</text>
+    <text x="640" y="554" class="sublabel">subscribed user lane for live latency tracking.</text>
+    <text x="640" y="586" class="mono">/ws → /topic/notifications/{tenantId}/{userId}</text>
+  </g>
+
+  <!-- User lanes -->
+  <g class="shadow">
+    <rect x="1040" y="455" width="440" height="165" class="box" fill="#0f172a" fill-opacity="0.95" stroke="#fb7185"/>
+    <text x="1070" y="500" class="label">Simulated user lanes</text>
+    <text x="1070" y="528" class="sublabel">Each user is an independent subscriber with its own</text>
+    <text x="1070" y="550" class="sublabel">delivery timestamp, read state, and latency history.</text>
+    <text x="1070" y="582" class="mono">user-1 • user-2 • user-3 ...</text>
+  </g>
+
+  <!-- Arrows -->
+  <path d="M 380 255 C 410 255, 425 255, 455 255" stroke="#60a5fa" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 845 245 C 885 245, 910 245, 955 245" stroke="#34d399" stroke-width="4" fill="none" marker-end="url(#arrow-green)"/>
+  <path d="M 1215 245 C 1230 245, 1240 245, 1260 245" stroke="#fbbf24" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 585 345 C 585 405, 665 430, 725 460" stroke="#94a3b8" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 990 535 C 1025 535, 1035 535, 1040 535" stroke="#fb7185" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 725 610 C 725 700, 1150 700, 1260 640" stroke="#60a5fa" stroke-width="4" fill="none" marker-end="url(#arrow)" stroke-dasharray="10 8" opacity="0.9"/>
+
+  <!-- Middle explanatory card -->
+  <g>
+    <rect x="470" y="690" width="1030" height="140" rx="20" fill="url(#panel)" stroke="#334155" stroke-width="1.5"/>
+    <text x="505" y="735" class="label">What this project demonstrates</text>
+    <text x="505" y="765" class="sublabel">Clean / Hexagonal separation, event fan-out, live push updates, and latency observability in one flow.</text>
+    <text x="505" y="792" class="sublabel">Useful for demoing notification systems, websocket delivery paths, and async event-driven architecture.</text>
+  </g>
+
+  <!-- Callout dots -->
+  <circle cx="395" cy="255" r="7" fill="#22d3ee"/>
+  <circle cx="875" cy="245" r="7" fill="#34d399"/>
+  <circle cx="1238" cy="245" r="7" fill="#fbbf24"/>
+  <circle cx="990" cy="535" r="7" fill="#fb7185"/>
+</svg>
