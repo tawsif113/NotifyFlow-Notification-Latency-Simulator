@@ -1,8 +1,25 @@
 # NotifyFlow Notification Latency Simulator
 
+[![Java 25](https://img.shields.io/badge/Java-25-ED8B00?logo=java&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Messaging-FF6600?logo=rabbitmq&logoColor=white)](https://www.rabbitmq.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-316192?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![WebSocket](https://img.shields.io/badge/WebSocket%2FSTOMP-Realtime-0EA5E9)](https://stomp.github.io/)
+
 NotifyFlow is an event-driven notification simulation system for broadcasting notifications, pushing them to live user lanes, and measuring end-to-end delivery latency in real time.
 
+## Screenshots
+
+### Dashboard overview
+
+![NotifyFlow dashboard overview](docs/assets/dashboard-overview.png)
+
+### System architecture
+
 ![NotifyFlow architecture](docs/assets/architecture.svg)
+
+### Delivery flow
 
 ![NotifyFlow delivery flow](docs/assets/delivery-flow.svg)
 
@@ -34,8 +51,8 @@ NotifyFlow is an event-driven notification simulation system for broadcasting no
   - `notification-api` — REST controllers and DTOs
   - `notification-bootstrap` — app wiring and runtime config
 - `frontend/` — live simulation dashboard
-- `docs/` — verification notes and supporting documentation
-- `docs/assets/` — diagram images used in the README
+- `docs/` — verification notes, deployment notes, and supporting documentation
+- `docs/assets/` — diagram images and UI screenshots used in the README
 
 ## Core flow
 
@@ -93,10 +110,19 @@ npm run build
 npm run dev
 ```
 
+## Deployment
+
+See `docs/deployment.md` for:
+- Docker / Docker Compose deployment
+- Render deployment
+- Cloudflare Pages deployment for the frontend
+
 ## Docs
 
 - `backend/README.md` — backend module breakdown and backend-only run steps
 - `docs/verification.md` — end-to-end verification checklist
+- `docs/deployment.md` — deployment guides
+- `docs/assets/dashboard-overview.png` — screenshot of the live dashboard
 - `docs/assets/architecture.svg` — architecture image
 - `docs/assets/delivery-flow.svg` — delivery flow image
 
