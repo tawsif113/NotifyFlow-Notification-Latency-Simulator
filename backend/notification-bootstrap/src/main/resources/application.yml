@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: notifyflow-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5433/notifications
+    username: notifyflow
+    password: notifyflow
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+server:
+  port: 8080

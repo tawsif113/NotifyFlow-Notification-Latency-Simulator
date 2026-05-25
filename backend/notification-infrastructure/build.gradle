@@ -1,0 +1,19 @@
+plugins {
+    id 'org.springframework.boot' version '3.3.5' apply false
+}
+
+dependencies {
+    api project(':notification-domain')
+    api project(':notification-application')
+
+    implementation platform('org.springframework.boot:spring-boot-dependencies:3.3.5')
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

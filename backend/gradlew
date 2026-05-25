@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+DIR="$(cd "$(dirname "$0")" && pwd)"
+DIST_URL="https://services.gradle.org/distributions/gradle-9.2.1-bin.zip"
+CACHE_DIR="${HOME}/.gradle-wrapper-custom"
+DIST_DIR="${CACHE_DIR}/gradle-9.2.1"
+if [ ! -x "${DIST_DIR}/bin/gradle" ]; then
+  mkdir -p "${CACHE_DIR}"
+  ZIP="${CACHE_DIR}/gradle-9.2.1-bin.zip"
+  if [ ! -f "$ZIP" ]; then
+    curl -fsSL "$DIST_URL" -o "$ZIP"
+  fi
+  rm -rf "$DIST_DIR"
+  unzip -q "$ZIP" -d "$CACHE_DIR"
+fi
+exec "${CACHE_DIR}/gradle-9.2.1/bin/gradle" -p "$DIR" "$@"
